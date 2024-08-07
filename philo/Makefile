@@ -7,7 +7,9 @@ SRCS = philo.c \
 		utils_functions.c \
 		input_validation.c \
 		philo_routine.c \
-		monitoring.c \
+		monitor.c \
+		threads.c \
+		philo_eat_routine.c \
 		
 OBJS = $(SRCS:.c=.o)
 

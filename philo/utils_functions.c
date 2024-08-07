@@ -28,10 +28,13 @@ static int	ft_isspace(int arg)
 		return (0);
 }
 
-long ft_atol(const char *str)
+long	ft_atol(const char *str)
 {
-	long result = 0;
-	int sign = 1;
+	long	result;
+	int		sign;
+
+	result = 0;
+	sign = 1;
 	while (ft_isspace(*str))
 		str++;
 	if (*str == '+' || *str == '-')
@@ -60,13 +63,13 @@ size_t	current_time(void)
 int	ft_usleep(t_philo *philo, size_t time)
 {
 	size_t	start;
-	
+
 	start = current_time();
 	while ((current_time() - start) < time)
 	{
 		if (check_if_dead(philo))
 			return (1);
-		usleep(500);
+		usleep(100);
 	}
 	return (0);
 }

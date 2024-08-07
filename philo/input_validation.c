@@ -41,19 +41,23 @@ int	check_args(char **argv)
 	{
 		if (check_if_digit(argv[i]) || ft_atol(argv[i]) < 1)
 		{
-			return (error_message("Invalid input: it must be a digit and positive number"));
+			return (error_message("Invalid input: \
+			it must be a digit and positive number other than 0"));
 		}
 		i++;
 	}
 	return (0);
 }
+
 void	message(t_philo *philo, char *msg)
 {
 	size_t	time;
 
 	pthread_mutex_lock(&philo->main->print_lock);
 	time = current_time() - philo->main->start_time;
+	pthread_mutex_lock(&philo->main->dead_lock);
 	if (!philo->main->died)
 		printf("%zu %d %s\n", time, philo->id, msg);
+	pthread_mutex_unlock(&philo->main->dead_lock);
 	pthread_mutex_unlock(&philo->main->print_lock);
 }
