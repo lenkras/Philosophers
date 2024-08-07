@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILOS_H
+# define PHILOS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -20,7 +20,7 @@
 # include <pthread.h>
 # include <limits.h>
 
-typedef struct s_simul t_simul;
+typedef struct s_simul	t_simul;
 
 typedef struct s_philo
 {
@@ -33,11 +33,7 @@ typedef struct s_philo
 	int				*philo_died;
 	t_simul			*main;
 	pthread_t		thread;
-	int				*start_simulation;
-	pthread_mutex_t	*start_mutex;
-	int r_fork;
-	int l_fork;
-} t_philo;
+}	t_philo;
 
 typedef struct s_simul
 {
@@ -53,19 +49,23 @@ typedef struct s_simul
 	pthread_mutex_t	dead_lock;
 	t_philo			*philos;
 	size_t			start_time;
-} t_simul;
+	pthread_mutex_t	start_mutex;
+	int				start_simulation;
+}	t_simul;
 
 int		error_message(char *msg);
 int		check_if_digit(char *argv);
 int		check_args(char **argv);
-long 	ft_atol(const char *str);
+long	ft_atol(const char *str);
 int		ft_usleep(t_philo *philo, size_t time);
 size_t	current_time(void);
 void	message(t_philo *philo, char *msg);
 int		check_if_dead(t_philo *philo);
 void	*philo_routine(void *arg);
 void	*simul_monitor(void *arg);
-void    free_all(t_simul *data);
-
+void	free_all(t_simul *data);
+int		create_threads(t_simul *data);
+void	check_if_simul_start(t_philo *philo);
+void	philo_eat(t_philo *philo);
 
 #endif
