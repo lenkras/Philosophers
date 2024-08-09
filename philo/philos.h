@@ -67,5 +67,7 @@ void	free_all(t_simul *data);
 int		create_threads(t_simul *data);
 void	check_if_simul_start(t_philo *philo);
 void	philo_eat(t_philo *philo);
+int		ft_strlen(char *str);
+int		init_simulation(t_simul *data, char **argv, int argc);
 
 #endif

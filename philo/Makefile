@@ -10,6 +10,7 @@ SRCS = philo.c \
 		monitor.c \
 		threads.c \
 		philo_eat_routine.c \
+		initialize.c \
 		
 OBJS = $(SRCS:.c=.o)
 
