@@ -39,14 +39,26 @@ int	check_args(char **argv)
 	i = 1;
 	while (i < 5)
 	{
-		if (check_if_digit(argv[i]) || ft_atol(argv[i]) < 1)
+		if (check_if_digit(argv[i]) || ft_atol(argv[i]) < 1 || \
+				ft_strlen(argv[i]) > 7)
 		{
-			return (error_message("Invalid input: \
-			it must be a digit and positive number other than 0"));
+			printf("Invalid input:");
+			return (error_message \
+			("it must be a positive number other than 0"));
 		}
 		i++;
 	}
 	return (0);
+}
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
 void	message(t_philo *philo, char *msg)

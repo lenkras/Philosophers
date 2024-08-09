@@ -26,21 +26,33 @@ static int	join_threads(t_simul *data)
 	return (0);
 }
 
-int	create_threads(t_simul *data)
+static int	create_with_pthread(t_simul *data)
 {
-	int				i;
-	pthread_t		monitor;
+	int	i;
 
 	i = 0;
-	if (pthread_create(&monitor, NULL, &simul_monitor, data) != 0)
-		return (error_message("Failed to create monitor thread"));
 	while (i < data->num_of_philos)
 	{
 		if (pthread_create(&data->philos[i].thread, NULL, &philo_routine, \
 				&data->philos[i]) != 0)
+		{
+			while (--i >= 0)
+				pthread_detach(data->philos[i].thread);
 			return (error_message("Failed to create thread"));
+		}
 		i++;
 	}
+	return (0);
+}
+
+int	create_threads(t_simul *data)
+{
+	pthread_t		monitor;
+
+	if (create_with_pthread(data))
+		return (1);
+	if (pthread_create(&monitor, NULL, &simul_monitor, data) != 0)
+		return (error_message("Failed to create monitor thread"));
 	data->start_time = current_time();
 	pthread_mutex_lock(&data->start_mutex);
 	data->start_simulation = 1;

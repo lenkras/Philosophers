@@ -12,7 +12,7 @@
 
 #include "philos.h"
 
-int	philo_dead(t_simul *data)
+int	check_if_died(t_simul *data)
 {
 	int	i;
 
@@ -35,13 +35,15 @@ int	philo_dead(t_simul *data)
 	return (0);
 }
 
-int	task_complete(t_simul *data)
+int	check_if_ready(t_simul *data)
 {
 	int	i;
 	int	ready;
 
 	i = 0;
 	ready = 0;
+	if (data->meals_count == -1)
+		return (0);
 	while (i < data->num_of_philos)
 	{
 		pthread_mutex_lock(&data->eat_lock);
@@ -79,7 +81,7 @@ void	*simul_monitor(void *arg)
 	data = (t_simul *)arg;
 	while (1)
 	{
-		if (philo_dead(data) == 1 || task_complete(data) == 1)
+		if (check_if_died(data) == 1 || check_if_ready(data) == 1)
 			break ;
 		usleep (1000);
 	}
