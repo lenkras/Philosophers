@@ -51,9 +51,9 @@ int	create_threads(t_simul *data)
 
 	if (create_with_pthread(data))
 		return (1);
+	data->start_time = current_time();
 	if (pthread_create(&monitor, NULL, &simul_monitor, data) != 0)
 		return (error_message("Failed to create monitor thread"));
-	data->start_time = current_time();
 	pthread_mutex_lock(&data->start_mutex);
 	data->start_simulation = 1;
 	pthread_mutex_unlock(&data->start_mutex);
