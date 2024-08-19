@@ -12,6 +12,21 @@
 
 #include "philos.h"
 
+int	init_simulation(t_simul *data, char **argv, int argc)
+{
+	if (init_arguments(data, argv, argc))
+		return (1);
+	if (init_data(data))
+		return (1);
+	if (init_mutex_locks(data))
+		return (1);
+	data->start_simulation = 0;
+	if (init_mutex_forks(data))
+		return (1);
+	init_philos(data);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_simul		data;

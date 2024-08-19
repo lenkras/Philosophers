@@ -12,7 +12,7 @@
 
 #include "philos.h"
 
-static int	init_arguments(t_simul *info, char **argv, int argc)
+int	init_arguments(t_simul *info, char **argv, int argc)
 {
 	info->num_of_philos = ft_atol(argv[1]);
 	info->period_to_die = ft_atol(argv[2]);
@@ -35,7 +35,7 @@ static int	init_arguments(t_simul *info, char **argv, int argc)
 	return (0);
 }
 
-static int	init_philos(t_simul *data)
+int	init_philos(t_simul *data)
 {
 	int	i;
 
@@ -54,21 +54,22 @@ static int	init_philos(t_simul *data)
 	return (0);
 }
 
-static void	init_data(t_simul *data)
+int	init_data(t_simul *data)
 {
 	data->died = 0;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_of_philos);
 	if (!data->forks)
-		return ;
+		return (error_message("Malloc failed"));
 	data->philos = malloc(sizeof(t_philo) * data->num_of_philos);
 	if (!data->philos)
 	{
 		free(data->forks);
-		return ;
+		return (error_message("Malloc failed"));
 	}
+	return (0);
 }
 
-static int	init_mutex(t_simul *data)
+int	init_mutex_forks(t_simul *data)
 {
 	int	i;
 
@@ -77,30 +78,42 @@ static int	init_mutex(t_simul *data)
 	{
 		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 		{
-			error_message("Mutex initialization failed");
 			while (--i >= 0)
 				pthread_mutex_destroy(&data->forks[i]);
+			pthread_mutex_destroy(&data->print_lock);
+			pthread_mutex_destroy(&data->eat_lock);
+			pthread_mutex_destroy(&data->dead_lock);
+			pthread_mutex_destroy(&data->start_mutex);
 			free(data->forks);
 			free(data->philos);
-			return (1);
+			return (error_message("Mutex initialization failed"));
 		}
 		i++;
 	}
 	return (0);
 }
 
-int	init_simulation(t_simul *data, char **argv, int argc)
+int	init_mutex_locks(t_simul *data)
 {
-	if (init_arguments(data, argv, argc))
-		return (1);
-	init_data(data);
-	pthread_mutex_init(&data->print_lock, NULL);
-	pthread_mutex_init(&data->eat_lock, NULL);
-	pthread_mutex_init(&data->dead_lock, NULL);
-	pthread_mutex_init(&data->start_mutex, NULL);
-	data->start_simulation = 0;
-	if (init_mutex(data))
-		return (1);
-	init_philos(data);
+	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
+		return (error_message("Mutex initialization failed"));
+	if (pthread_mutex_init(&data->eat_lock, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->print_lock);
+		return (error_message("Mutex initialization failed"));
+	}
+	if (pthread_mutex_init(&data->dead_lock, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->print_lock);
+		pthread_mutex_destroy(&data->eat_lock);
+		return (error_message("Mutex initialization failed"));
+	}
+	if (pthread_mutex_init(&data->start_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->print_lock);
+		pthread_mutex_destroy(&data->eat_lock);
+		pthread_mutex_destroy(&data->dead_lock);
+		return (error_message("Mutex initialization failed"));
+	}
 	return (0);
 }

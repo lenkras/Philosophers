@@ -53,6 +53,12 @@ typedef struct s_simul
 	int				start_simulation;
 }	t_simul;
 
+int		init_simulation(t_simul *data, char **argv, int argc);
+int		init_arguments(t_simul *info, char **argv, int argc);
+int		init_philos(t_simul *data);
+int		init_data(t_simul *data);
+int		init_mutex_forks(t_simul *data);
+int		init_mutex_locks(t_simul *data);
 int		error_message(char *msg);
 int		check_if_digit(char *argv);
 int		check_args(char **argv);
@@ -68,6 +74,5 @@ int		create_threads(t_simul *data);
 void	check_if_simul_start(t_philo *philo);
 void	philo_eat(t_philo *philo);
 int		ft_strlen(char *str);
-int		init_simulation(t_simul *data, char **argv, int argc);
 
 #endif
