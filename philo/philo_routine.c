@@ -12,18 +12,6 @@
 
 #include "philos.h"
 
-// int	check_if_dead(t_philo *philo)
-// {
-// 	pthread_mutex_lock(&philo->main->dead_lock);
-// 	if (philo->main->died == 1)
-// 	{
-// 		pthread_mutex_unlock(&philo->main->dead_lock);
-// 		return (1);
-// 	}
-// 	pthread_mutex_unlock(&philo->main->dead_lock);
-// 	return (0);
-// }
-
 int	check_if_dead(t_philo *philo)
 {
 	int	is_dead;
